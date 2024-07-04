@@ -1,0 +1,185 @@
+<odoo>
+
+
+<!-- Tree View -->
+<record id="view_task_event_tree" model="ir.ui.view">
+    <field name="name">task.event.tree</field>
+    <field name="model">autonomous.maintenance.task.event</field>
+    <field name="arch" type="xml">
+        <tree>
+           <field name="equipment_id"/>
+            <field name="scheduled_date"/>
+              <field name="priority"/>
+        </tree>
+    </field>
+</record>
+
+<!-- Calendar View -->
+<record id="view_task_event_calendar" model="ir.ui.view">
+    <field name="name">task.event.calendar</field>
+    <field name="model">autonomous.maintenance.task.event</field>
+    <field name="arch" type="xml">
+        <calendar string="Task Events" date_start="scheduled_date" date_stop="date_completed">
+         
+            <field name="equipment_id"/>
+        </calendar>
+    </field>
+</record>
+
+<!-- Action for task events related to an equipment -->
+<record id="autonomous_maintenance_task_event_action" model="ir.actions.act_window">
+    <field name="name">Task Events</field>
+    <field name="res_model">autonomous.maintenance.task.event</field>
+    <field name="view_mode">kanban,tree,calendar</field>
+    <field name="domain">[('equipment_id', '=', context.get('default_equipment_id'))]</field>
+</record>
+
+
+<record id="view_autonomous_maintenance_task_event_kanban" model="ir.ui.view">
+        <field name="name">autonomous.maintenance.task.event.kanban</field>
+        <field name="model">autonomous.maintenance.task.event</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <!-- Define kanban view structure --><field name="equipment_id"/>
+            <templates>
+                <t t-name="kanban-box">
+                    <div class="oe_kanban_global_click">
+                        
+                        <div><field name="equipment_id"/></div>
+                    </div>
+                </t>
+            </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_autonomous_maintenance_task_event_tree" model="ir.ui.view">
+        <field name="name">autonomous.maintenance.task.event.tree</field>
+        <field name="model">autonomous.maintenance.task.event</field>
+        <field name="arch" type="xml">
+            <tree>
+                <!-- Define tree view structure --><field name="equipment_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Task Event by Equipment -->
+    <record id="view_autonomous_maintenance_task_event_by_equipment_tree" model="ir.ui.view">
+        <field name="name">autonomous.maintenance.task.event.by.equipment.tree</field>
+        <field name="model">autonomous.maintenance.task.event</field>
+        <field name="arch" type="xml">
+            <tree decoration-info="state == 'OK'" decoration-danger="state == 'NOK'" decoration-muted="state == 'missed'">
+                 <field name="equipment_id"/>
+                <field name="task_id"/>
+                <field name="scheduled_date"/>
+                <field name="state"/>
+                
+                <field name="priority"/>
+                
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_task_event_kanban" model="ir.ui.view">
+        <field name="name">autonomous.maintenance.task.event.kanban</field>
+        <field name="model">autonomous.maintenance.task.event</field>
+        <field name="arch" type="xml">
+      <kanban default_group_by="state">
+                <field name="state"/>
+                <field name="task_id"/>
+                <field name="scheduled_date"/>
+                <field name="date_completed"/>
+                <field name="equipment_id"/>
+                <field name="priority"/>
+                <field name="user_id"/>
+
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card oe_kanban_color_#{kanban_getcolor(record.state.raw_value)}">
+                            <div class="oe_kanban_details">
+                                <div class="oe_kanban_header">
+                                    <strong>
+                                        <field name="task_id"/>
+                                    </strong>
+                                    <div t-if="record.state.raw_value == 'pending'">
+                                        <i class="fa fa-clock-o" title="Pending" aria-hidden="true"></i>
+                                    </div>
+                                    <div t-if="record.state.raw_value == 'OK'">
+                                        <i class="fa fa-check-circle" title="OK" aria-hidden="true" style="color: green;"></i>
+                                    </div>
+                                    <div t-if="record.state.raw_value == 'NOK'">
+                                        <i class="fa fa-times-circle" title="NOK" aria-hidden="true" style="color: red;"></i>
+                                    </div>
+                                    <div t-if="record.state.raw_value == 'missed'">
+                                        <i class="fa fa-exclamation-circle" title="Missed" aria-hidden="true" style="color: brown;"></i>
+                                    </div>
+                                </div>
+                                <div class="oe_kanban_detail">
+                                    <field name="equipment_id"/>
+                                </div>
+                                <div class="oe_kanban_detail">
+                                    <field name="scheduled_date"/>
+                                </div>
+                                <div class="oe_kanban_detail">
+                                    <field name="date_completed"/>
+                                </div>
+                                <div class="oe_kanban_detail">
+                                    <field name="priority"/>
+                                </div>
+                            </div>
+                            <div class="oe_kanban_footer">
+                                <span class="oe_kanban_badge">
+                                    <field name="state" widget="statusbar" options="{'clickable': False}" />
+                                </span>
+                                <div class="oe_kanban_avatar">
+                                    <field name="user_id" widget="many2one_avatar_only"/>
+                                </div>
+                            </div>
+                            <div class="oe_kanban_quick_actions">
+                                <button type="button" class="btn btn-sm btn-primary" name="mark_as_complete" t-att-data-id="record.id.raw_value" t-attf-id="btn_complete_#{record.id.raw_value}">
+                                    <i class="fa fa-check"/> Complete
+                                </button>
+                                <button type="button" class="btn btn-sm btn-warning" name="move_to_next_stage" t-att-data-id="record.id.raw_value" t-attf-id="btn_next_stage_#{record.id.raw_value}">
+                                    <i class="fa fa-arrow-right"/> Next Stage
+                                </button>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+       <!-- Task Event by User -->
+    <record id="view_autonomous_maintenance_task_event_by_user_tree" model="ir.ui.view">
+        <field name="name">autonomous.maintenance.task.event.by.user.tree</field>
+        <field name="model">autonomous.maintenance.task.event</field>
+        <field name="arch" type="xml">
+            <tree decoration-info="state == 'OK'" decoration-danger="state == 'NOK'" decoration-muted="state == 'missed'">
+                 <field name="equipment_id"/>
+                <field name="task_id"/>
+                <field name="scheduled_date"/>
+                <field name="state"/>
+                <field name="date_completed"/>
+            </tree>
+        </field>
+    </record>
+       <!-- Task Event Calendar View -->
+    <record id="view_autonomous_maintenance_task_event_calendar" model="ir.ui.view">
+        <field name="name">autonomous.maintenance.task.event.calendar</field>
+        <field name="model">autonomous.maintenance.task.event</field>
+        <field name="arch" type="xml">
+            <calendar string="Maintenance Task Events"
+                      date_start="scheduled_date"
+                      mode="month">
+                <field name="task_id"/>
+                <field name="state"/>
+            </calendar>
+        </field>
+    </record>
+
+
+  
+   
+
+
+</odoo>

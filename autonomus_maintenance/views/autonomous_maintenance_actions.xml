@@ -1,0 +1,60 @@
+<odoo>
+    <record id="autonomous_maintenance_equipment_kanban_action" model="ir.actions.act_window">
+        <field name="name">Equipments</field>
+        <field name="res_model">maintenance.equipment</field>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="view_equipment_kanban"/>
+        <field name="domain">[('owner_user_id', '=', uid)]</field>
+    </record>
+
+    <record id="action_autonomous_maintenance_task_event_calendar" model="ir.actions.act_window">
+        <field name="name">Maintenance Task Events Calendar</field>
+        <field name="res_model">autonomous.maintenance.task.event</field>
+        <field name="view_mode">kanban,calendar,tree,form</field>
+        <field name="view_id" ref="view_task_event_calendar"/>
+        <field name="context">{}</field>
+    </record>
+
+    <record id="action_autonomous_maintenance_task_event_by_user" model="ir.actions.act_window">
+        <field name="name">Maintenance Task Events by User</field>
+        <field name="res_model">autonomous.maintenance.task.event</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="view_id" ref="view_task_event_tree"/>
+        <field name="context">{}</field>
+        <field name="domain">[('task_id.assigned_user_id', '=', uid)]</field>
+    </record>
+
+    <record id="action_autonomous_maintenance_task_event_by_equipment" model="ir.actions.act_window">
+        <field name="name">Maintenance Task Events by Equipment</field>
+        <field name="res_model">autonomous.maintenance.task.event</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="view_id" ref="view_task_event_tree"/>
+        <field name="context">{}</field>
+        <field name="domain">[('task_id.equipment_id', '!=', False)]</field>
+    </record>
+
+    <record id="autonomous_maintenance_task_action" model="ir.actions.act_window">
+        <field name="name">Tasks</field>
+        <field name="res_model">autonomous.maintenance.task</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_maintenance_task_event" model="ir.actions.act_window">
+    <field name="name">Autonomous Maintenance Task Events</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">autonomous.maintenance.task</field>
+    <field name="view_mode">tree</field>
+    <field name="view_id" ref="autonomus_maintenance.view_autonomous_maintenance_task_event_tree"/>  
+</record>
+
+    <record id="view_task_event_kanban_action" model="ir.actions.act_window">
+        <field name="name">Task Events</field>
+        <field name="res_model">autonomous.maintenance.task.event</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_create">
+                Click to create a new task event.
+            </p>
+        </field>
+ </record> 
+</odoo>

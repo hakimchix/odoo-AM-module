@@ -1,0 +1,15 @@
+<odoo>
+    <menuitem id="autonomous_maintenance_root_menu" name="Autonomous Maintenance" sequence="10"/>
+
+   
+    <!-- Equipments Menu -->
+    <menuitem id="autonomous_maintenance_equipment_menu" name="Equipments" parent="autonomous_maintenance_root_menu" sequence="10"/>
+    <menuitem id="autonomous_maintenance_equipment_kanban_menu" name="My Equipments" parent="autonomous_maintenance_equipment_menu" action="autonomous_maintenance_equipment_kanban_action" />
+    <menuitem id="autonomous_maintenance_equipment_tasks_menu" name="Equipments TASKS" parent="autonomous_maintenance_equipment_menu" action="view_task_event_kanban_action" />
+     <!-- Configuration Menu -->
+    <menuitem id="autonomous_maintenance_configuration_menu" name="Configuration" parent="autonomous_maintenance_root_menu" sequence="20"/>
+    <menuitem id="autonomous_maintenance_task_menu" name="Tasks" parent="autonomous_maintenance_configuration_menu" action="autonomous_maintenance_task_action" sequence="10"/>
+
+</odoo>
+
+

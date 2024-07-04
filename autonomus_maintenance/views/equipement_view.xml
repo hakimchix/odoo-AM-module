@@ -1,0 +1,90 @@
+<odoo>
+!-- Modify the equipment form view to include task event action -->
+<record id="view_equipment_form" model="ir.ui.view">
+    <field name="name">equipment.form</field>
+    <field name="model">maintenance.equipment</field>
+    <field name="arch" type="xml">
+        <form>
+            <sheet>
+                <group>
+                    
+                    <field name="owner_user_id"/>
+                </group>
+                <notebook>
+                    <page string="Task Events">
+                        <field name="task_event_ids" context="{'default_equipment_id': active_id}">
+                            <tree>
+                                
+                                <field name="scheduled_date"/>
+                                <field name="date_completed"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </sheet>
+        </form>
+    </field>
+</record> 
+        <record id="view_equipment_kanban" model="ir.ui.view">
+        <field name="name">equipment.kanban</field>
+        <field name="model">maintenance.equipment</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name"/>
+                <field name="owner_user_id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click o_kanban_card_{{ record.owner_user_id.raw_value }}">
+                            <div class="o_kanban_record_body">
+                                <strong><field name="name"/></strong>
+                                <div><field name="owner_user_id"/></div>
+                                <button type="object" class="btn btn-primary" name="open_task_events">Show Task Events</button>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_equipment_form" model="ir.ui.view">
+        <field name="name">equipment.form</field>
+        <field name="model">maintenance.equipment</field>
+        <field name="arch" type="xml">
+            <form string="Equipment">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="owner_user_id"/>
+                    </group>
+                    <notebook>
+                        <page string="Task Events">
+                            <field name="task_event_ids" context="{'default_equipment_id': active_id}">
+                                <tree>
+                                    <field name="task_id"/>
+                                    <field name="scheduled_date"/>
+                                    <field name="date_completed"/>
+                                </tree>
+                                <kanban>
+                                    <field name="task_id"/>
+                                    <field name="scheduled_date"/>
+                                    <field name="date_completed"/>
+                                </kanban>
+                                <calendar date_start="scheduled_date" date_stop="date_completed">
+                                    <field name="task_id"/>
+                                </calendar>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="autonomous_maintenance_equipment_kanban_action" model="ir.actions.act_window">
+        <field name="name">Equipments</field>
+        <field name="res_model">maintenance.equipment</field>
+        <field name="view_mode">kanban</field>
+        <field name="domain">[('owner_user_id', '=', uid)]</field>
+    </record>
+</odoo>
